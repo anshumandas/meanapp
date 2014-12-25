@@ -8,17 +8,17 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
-  role: {
-    type: String,
-    default: 'user'
-  },
+//AD: added enum
+  role: {type: String, default : 'user', enum: ['admin', 'user']},
   hashedPassword: String,
   provider: String,
   salt: String,
   facebook: {},
   twitter: {},
   google: {},
-  github: {}
+  github: {},
+//AD : added the following properties
+  nickname: {type: String, required: true, index: { unique: true } } //let user choose unique virtual identity post login. 
 });
 
 /**
