@@ -40,3 +40,6 @@
         max-width: 730px;
     }
 }
+
+/** AD: As suggested in http://angular-ui.github.io/bootstrap/ */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

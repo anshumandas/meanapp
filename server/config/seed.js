@@ -33,19 +33,24 @@ Thing.find({}).remove(function() {
 User.find({}).remove(function() {
   User.create({
     provider: 'local',
-    name: 'Test User',
+//    name: 'Test User',
     email: 'test@test.com',
     password: 'test',
-    nickname: 'test_1'
+    nickname: 'test'
   }, {
     provider: 'local',
     role: 'admin',
-    name: 'Admin',
+//    name: 'Admin',
     email: 'admin@admin.com',
     password: 'admin',
-    nickname: 'admin_1'
+    nickname: 'admin'
   }, function() {
       console.log('finished populating users');
     }
   );
+});
+
+//AD: remove profile info
+var Profile = require('../api/forms/profile');
+Profile.find({}).remove(function() {
 });

@@ -14,4 +14,7 @@ router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 
+//AD:added below to save profile id
+router.put('/:id/addProfile', auth.isAuthenticated(), controller.addProfileID);
+
 module.exports = router;

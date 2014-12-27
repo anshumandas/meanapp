@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meanappApp')
-  .controller('SettingsCtrl', function ($scope, User, Auth) {
+  .controller('ChPwdCtrl', function ($scope, User, Auth) {
     $scope.errors = {};
 
     $scope.changePassword = function(form) {

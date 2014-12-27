@@ -93,6 +93,25 @@ angular.module('meanappApp')
       },
 
       /**
+       * AD: This is to add profile id to the user
+       *
+       * @param  {String}   profileID
+       * @param  {Function} callback    - optional
+       * @return {Promise}
+       */
+      addProfileID: function(profileID, callback) {
+        var cb = callback || angular.noop;
+
+        return User.addProfileID({ id: currentUser._id }, {
+          pid: profileID
+        }, function(user) {
+          return cb(user);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
+      },
+        
+      /**
        * Gets all available info on authenticated user
        *
        * @return {Object} user

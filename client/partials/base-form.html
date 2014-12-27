@@ -1,0 +1,22 @@
+<div class="container-fluid page-body edit-body">
+    <!--This section only appears when there is an error message to display-->
+    <div id="display-error" ng-show="errorMessage" ng-class="css('rowFluid')">
+        <div class="alert alert-error col-lg-offset-3 offset3 col-sm-6 span6 alert-warning alert-dismissable">
+            <button type="button" class="close" ng-click="dismissError()">×</button>
+            <h4>{{alertTitle}}</h4>
+            <div ng-bind-html="errorMessage"></div>
+        </div>
+    </div>
+    <form-input name="baseForm" schema="baseSchema()" formstyle="compact"></form-input>
+    <div class="form-group has-error">
+        <p class="help-block">{{ errors.other }}</p>
+    </div>
+    <div class="pull-right">
+        <button id="saveButton" class="btn btn-primary form-btn btn-xs" ng-disabled="isSaveDisabled()" type="submit" ng-click="save()">
+            Save
+        </button>
+        <button id="cancelButton" class="btn btn-warning form-btn btn-xs" ng-disable="isCancelDisabled()" type="submit" ng-click="cancel()">
+            Clear
+        </button>
+    </div>
+</div>

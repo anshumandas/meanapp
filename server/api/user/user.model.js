@@ -4,9 +4,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
+var ProfileSchema = require('../forms/profile');
+
+var userRankOptions = 'newbie, explorer, champion, guru'.split(', ');
 
 var UserSchema = new Schema({
-  name: String,
+//AD: changed name to nickname
+//  name: String,
+  nickname: {type: String, required: true, index: { unique: true } }, //let user choose unique virtual identity post login. 
   email: { type: String, lowercase: true },
 //AD: added enum
   role: {type: String, default : 'user', enum: ['admin', 'user']},
@@ -17,8 +22,13 @@ var UserSchema = new Schema({
   twitter: {},
   google: {},
   github: {},
-//AD : added the following properties
-  nickname: {type: String, required: true, index: { unique: true } } //let user choose unique virtual identity post login. 
+//AD : added the following properties. These are not editable through forms.
+  created: {type: Date, default: Date.now},
+  lastActivity: {type: Date, default: Date.now}, //all actions must change this
+  activityCount: Number, //can be used to upgrade rank later on. Some activities can have higher weights
+  rank: {type: String, default : 'newbie', enum: userRankOptions},  
+  state: {type: String, default : 'active', enum: ['active', 'locked', 'deleted']},
+  details: {type: mongoose.Schema.Types.ObjectId, ref: 'profile'}
 });
 
 /**
@@ -40,7 +50,7 @@ UserSchema
   .virtual('profile')
   .get(function() {
     return {
-      'name': this.name,
+      'nickname': this.nickname,
       'role': this.role
     };
   });
@@ -59,13 +69,28 @@ UserSchema
  * Validations
  */
 
+// Validate if nick name exists
+UserSchema
+  .path('nickname')
+  .validate(function(value, respond) {
+    var self = this;
+    this.constructor.findOne({nickname: value}, function(err, user) {
+      if(err) throw err;
+      if(user) {
+        if(self.id === user.id) return respond(true);
+        return respond(false);
+      }
+      respond(true);
+    });
+}, 'Nickname is already taken. Please choose another');
+
 // Validate empty email
 UserSchema
   .path('email')
   .validate(function(email) {
     if (authTypes.indexOf(this.provider) !== -1) return true;
     return email.length;
-  }, 'Email cannot be blank');
+}, 'Email cannot be blank');
 
 // Validate empty password
 UserSchema
@@ -73,7 +98,7 @@ UserSchema
   .validate(function(hashedPassword) {
     if (authTypes.indexOf(this.provider) !== -1) return true;
     return hashedPassword.length;
-  }, 'Password cannot be blank');
+}, 'Password cannot be blank');
 
 // Validate email is not taken
 UserSchema
@@ -105,7 +130,7 @@ UserSchema
       next(new Error('Invalid password'));
     else
       next();
-  });
+});
 
 /**
  * Methods

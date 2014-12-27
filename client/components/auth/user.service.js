@@ -12,6 +12,13 @@ angular.module('meanappApp')
           controller:'password'
         }
       },
+        //AD:added this for profile id save        
+      addProfileID: {
+        method: 'PUT',
+        params: {
+          controller:'addProfile'
+        }
+      },
       get: {
         method: 'GET',
         params: {

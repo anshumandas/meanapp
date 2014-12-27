@@ -6,11 +6,9 @@ var User = require('./user.model');
 
 var user = new User({
   provider: 'local',
-  name: 'Fake User',
+  nickname: 'Fake User',
   email: 'test@test.com',
   password: 'password',
-    //AD add nickname
-  nickname: 'unique'
 });
 
 describe('User Model', function() {

@@ -8,15 +8,18 @@
     <div class="col-sm-12">
       <form class="form" name="form" ng-submit="register(form)" novalidate>
 
-        <div class="form-group" ng-class="{ 'has-success': form.name.$valid && submitted,
-                                            'has-error': form.name.$invalid && submitted }">
-          <label>Name</label>
+        <div class="form-group" ng-class="{ 'has-success': form.nickname.$valid && submitted,
+                                            'has-error': form.nickname.$invalid && submitted }">
+          <label>Nickname</label>
 
-          <input type="text" name="name" class="form-control" ng-model="user.name"
-                 required/>
-          <p class="help-block" ng-show="form.name.$error.required && submitted">
-              <!-- AD: Added Anonymous use instruction -->
-            A name is required. Please use "Anonymous" if you do not want to share your name.
+          <input type="text" name="nickname" class="form-control" ng-model="user.nickname"
+                 required
+                 mongoose-error/>
+          <p class="help-block" ng-show="form.nickname.$error.required && submitted">
+            A unique nickname is required. 
+          </p>
+          <p class="help-block" ng-show="form.nickname.$error.mongoose">
+            {{ errors.nickname }}
           </p>
         </div>
 

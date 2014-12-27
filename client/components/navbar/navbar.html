@@ -12,8 +12,8 @@
                     <a href="/" class="navbar-brand">meanapp</a>
                 </a>
             </div>
-            <div class="visible-lg visible-desktop pull-right col-md-1 span1"></div>
-            <global-search class="global-search"></global-search>
+<!--            <div class="visible-lg visible-desktop pull-right col-md-1 span1"></div>-->
+<!--            <global-search class="global-search"></global-search>-->
             <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
                     <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
@@ -23,12 +23,17 @@
                     <li class="dropdown"><a href="#" class="dropdown-toggle">Applicants</a>
                         <ul class="dropdown-menu">
 -->
-                            <li><a class="dropdown-option" href="data/Applicant/new">New</a></li>
+<!--
                             <li><a class="dropdown-option" href="data/Applicant">Listing</a></li>
-                            <li><a class="dropdown-option" href="data/analyse/Applicant">Basic Report</a></li>
+-->
 <!--                        </ul>-->
-                    </li>
-                    <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
+<!--                    </li>-->
+                    <li ng-show="isAdmin()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Admin <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                    <li ng-class="{active: isActive('/admin')}"><a class="dropdown-option" href="/admin">Users</a></li>
+                    <li ng-class="{active: isActive('/data/profile')}"><a class="dropdown-option" href="data/profile">Profiles</a></li>
+                        </ul>
+                    </li>                
 <!--
                     <li ng-show="items.length > 0" class="dropdown">
                         <a class="dropdown-toggle">
@@ -41,15 +46,20 @@
                         </ul>
                     </li>
 -->
+                  <li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     
                     <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup">Sign up</a></li>
                     <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login">Login</a></li>
-                    <li ng-show="isLoggedIn()"><p class="navbar-text">Hello {{ getCurrentUser().name }}</p> </li>
-                    <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
-                    <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()">Logout</a></li>
-                    
+                    <li ng-show="isLoggedIn()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Hello {{ getCurrentUser().nickname }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-hide="getCurrentUser().details" ui-sref="profile.new">Create Profile</a></li>
+                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="getCurrentUser().details" ui-sref="profile.edit({pid:getCurrentUser().details})">Edit Profile</a></li>
+                            <li ng-class="{active: isActive('/chpwd')}"><a class="dropdown-option" href="/chpwd">Change Password</a></li>
+                            <li ng-class="{active: isActive('/logout')}"><a class="dropdown-option" href="" ng-click="logout()">Logout</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

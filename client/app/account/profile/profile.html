@@ -1,0 +1,17 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><span>Edit {{getCurrentUser().nickname}} Profile  <span class="badge pull-right">{{getCurrentUser().rank}}</span></span></h3>
+    <hr>
+        </div>
+        <div class="col-sm-12">
+<!--            <form class="form" name="form" ng-submit="profile(form)" novalidate>-->
+                <div ui-view></div>
+<!--            </form>-->
+        </div>
+    </div>
+    <hr>
+</div>

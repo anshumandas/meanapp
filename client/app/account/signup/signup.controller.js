@@ -9,8 +9,11 @@ angular.module('meanappApp')
       $scope.submitted = true;
 
       if(form.$valid) {
+          
+//AD: send a confirmation email. If the confirmation happens then proceed
+          
         Auth.createUser({
-          name: $scope.user.name,
+          nickname: $scope.user.nickname,
           email: $scope.user.email,
           password: $scope.user.password
         })

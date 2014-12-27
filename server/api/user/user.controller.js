@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('./user.model');
+var Profile = require('../forms/profile');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
@@ -14,7 +15,7 @@ var validationError = function(res, err) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find({}, '-salt -hashedPassword', function (err, users) {
+  User.find({state: {'$ne':'deleted'}}, '-salt -hashedPassword', function (err, users) {
     if(err) return res.send(500, err).end();
     res.status(200).json(users);
   });
@@ -24,24 +25,25 @@ exports.index = function(req, res) {
  * Creates a new user
  */
 exports.create = function (req, res, next) {
+    console.log(req.body);
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'user';
   
 //AD changes for nickname support start **********
 //find count for the first name and append the next number
-  var firstname = newUser.name.split(' ')[0];
-
-  var query = User.count({name : new RegExp(firstname)}, function(err, c)
-  {
-      var up = c + 1;
-      newUser.nickname = firstname + "_" + up.toString(); 
+//  var firstname = newUser.name.split(' ')[0];
+//
+//  var query = User.count({name : new RegExp(firstname)}, function(err, c)
+//  {
+//      var up = c + 1;
+//      newUser.nickname = firstname + "_" + up.toString(); 
       newUser.save(function(err, user) {
         if (err) return validationError(res, err);
         var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
         res.json({ token: token });
       });
-  });
+//  });
     
 //AD changes end
 };
@@ -64,9 +66,56 @@ exports.show = function (req, res, next) {
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
-  User.findByIdAndRemove(req.params.id, function(err, user) {
-    if(err) return res.send(500, err).end();
-    return res.send(204).end();
+// AD: Only the profile gets deleted. The user record is never deleted but status marked as deleted
+  var userId = req.params.id;
+    
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401).end();
+    
+    user.state = 'deleted';
+      
+    if (!user.details) {
+        user.save(function(err) {
+            if (err) return validationError(res, err);
+            res.send(200).end();
+          });
+    } else {
+        console.log('deleting the profile id');
+        var pid = user.details;
+        Profile.findByIdAndRemove(pid, function(err, profile) {
+            if(err) return res.send(500, err).end();
+            user.details = undefined;
+            user.save(function(err) {
+                if (err) return validationError(res, err);
+                res.send(200).end();
+            });
+        });   
+//AD: this is not working as callback not provided 
+//        Profile.remove(user.details); //if callback provided or exec used will work
+//            user.save(function(err) {
+//                if (err) return validationError(res, err);
+//                res.send(200).end();
+//            });
+    }      
+  });    
+};
+
+/**
+ * AD: add profile id of user
+ */
+exports.addProfileID = function (req, res, next) {
+  var userId = req.params.id;
+  var profileId = req.body.pid;
+
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401).end();
+    user.details = profileId;
+    user.save(function(err) {
+        if (err) return validationError(res, err);
+        res.send(200).end();
+    });
   });
 };
 
