@@ -1,0 +1,61 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Sign up</h1>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="activate(form)" novalidate>
+
+        <div class="form-group" ng-class="{ 'has-success': form.nickname.$valid && submitted,
+                                            'has-error': form.nickname.$invalid && submitted }">
+          <label>Nickname</label>
+
+          <input type="text" name="nickname" class="form-control" ng-model="user.nickname"
+                 required
+                 mongoose-error/>
+          <p class="help-block" ng-show="form.nickname.$error.required && submitted">
+            A unique nickname is required. 
+          </p>
+          <p class="help-block" ng-show="form.nickname.$error.mongoose">
+            {{ errors.nickname }}
+          </p>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-success': form.password.$valid && submitted,
+                                            'has-error': form.password.$invalid && submitted }">
+          <label>Password</label>
+
+          <input type="password" name="password" class="form-control" ng-model="user.password"
+                 ng-minlength="3"
+                 required
+                 mongoose-error/>
+          <p class="help-block"
+             ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
+            Password must be at least 3 characters.
+          </p>
+          <p class="help-block" ng-show="form.password.$error.mongoose">
+            {{ errors.password }}
+          </p>
+        </div>
+
+        <div>
+          <button class="btn btn-inverse btn-lg btn-login" type="submit">
+            Sign up
+          </button>
+          <a class="btn btn-default btn-lg btn-register" href="/login">
+            Login
+          </a>
+        </div>        
+          <div class="form-group" >
+          <p class="help-block" ng-show="errors.message">
+            {{ errors.message }} <span ng-show="showLogin"> Please <a href="/login">login</a>...</span>
+              <span ng-show="showSignup"> Please <a href="/signup"> signup</a> again...</span>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+</div>

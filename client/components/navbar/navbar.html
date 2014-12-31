@@ -55,6 +55,7 @@
                     <li ng-show="isLoggedIn()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Hello {{ getCurrentUser().nickname }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-hide="getCurrentUser().details" ui-sref="profile.new">Create Profile</a></li>
+                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="getCurrentUser().details" ui-sref="profile.view({pid:getCurrentUser().details})">View Profile</a></li>
                             <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="getCurrentUser().details" ui-sref="profile.edit({pid:getCurrentUser().details})">Edit Profile</a></li>
                             <li ng-class="{active: isActive('/chpwd')}"><a class="dropdown-option" href="/chpwd">Change Password</a></li>
                             <li ng-class="{active: isActive('/logout')}"><a class="dropdown-option" href="" ng-click="logout()">Logout</a></li>

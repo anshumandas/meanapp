@@ -6,6 +6,9 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 
+var As = require('./activate').As;
+var mail = require('../../components/mailer');
+
 var validationError = function(res, err) {
   return res.status(422).json(err);
 };
@@ -24,12 +27,15 @@ exports.index = function(req, res) {
 /**
  * Creates a new user
  */
-exports.create = function (req, res, next) {
-    console.log(req.body);
-  var newUser = new User(req.body);
+var create = function (req, res, next) {
+  var newUser = new User({
+          nickname: req.body.nickname,
+          email: req.body.email,
+          password: req.body.password
+        });
   newUser.provider = 'local';
-  newUser.role = 'user';
-  
+  newUser.role = 'user';   
+    
 //AD changes for nickname support start **********
 //find count for the first name and append the next number
 //  var firstname = newUser.name.split(' ')[0];
@@ -39,13 +45,44 @@ exports.create = function (req, res, next) {
 //      var up = c + 1;
 //      newUser.nickname = firstname + "_" + up.toString(); 
       newUser.save(function(err, user) {
-        if (err) return validationError(res, err);
+          console.log(err);
+        if (err) return validationError(res, err);         
+        //set verify to true   
+        //AD: do not use save as it triggers pre save that rehashes the token
+//        As.findOne({ hashedEmail: req.body.token }, function(err, data) {  
+//          data.verifyStatus = true;
+//          data.save(function(err, user) { 
+//          });
+//        });
+        As.update({ hashedEmail: req.body.token }, { $set: { verifyStatus: true }}, {}, function(err, data) { });
         var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
         res.json({ token: token });
       });
 //  });
     
 //AD changes end
+};
+
+
+exports.createOrReset = function (req, res, next) {
+//AD: this can be called for new user or password reset
+//Check if user exists
+  User.findOne({email: req.body.email}, '-salt -hashedPassword', function (err, user) {
+    if (user) {
+//this is for password reset and unlocking
+      user.password = req.body.password;        
+      user.save(function(err, user) {
+        if (err) return validationError(res, err);         
+        As.update({ hashedEmail: req.body.token }, { $set: { verifyStatus: true }}, {}, function(err, data) { });
+        var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
+        res.json({ token: token });      
+      });        
+    } else {
+//does not exist so create
+        return create(req, res, next);
+    }
+  });
+    
 };
 
 /**
@@ -159,4 +196,81 @@ exports.me = function(req, res, next) {
  */
 exports.authCallback = function(req, res, next) {
   res.redirect('/');
+};
+
+/**
+ * AD: below functions are for the activation support
+ */
+
+exports.initiate = function(req, res) {
+  console.log('initiating');
+  var _mail = req.body.email;
+  //AD: check if the user already exists
+  User.findOne({email: _mail}, '-salt -hashedPassword', function (err, users) {
+    if (users) {
+//AD: this is for the reset password case. If a signup request for existing user, just send a email to that user to warn.       
+      var activationStatus = new As({ email: _mail, hashedEmail: _mail, verifyStatus: false });
+      activationStatus.save(function(err, data) {
+        if(err) {
+          return next(err);
+        } 
+        mail.sendResetMail(data,function (err, responseStatus) {
+          //do something here for errors
+          console.log('Error: '+err);
+          if(!err) res.status(200).json({message:'Account exists. We have dropped you an email to reset your password!'});
+        });
+      });
+        
+    } else {
+//AD: this is for the signup case
+      var activationStatus = new As({ email: _mail, hashedEmail: _mail, verifyStatus: false });
+      activationStatus.save(function(err, data) {
+        if(err) {
+          return next(err);
+        } 
+        mail.sendSignupMail(data,function (err, responseStatus) {
+          //do something here for errors
+          console.log('Error: '+err);
+          if(!err) res.status(200).json({message:'Account does not exist. We have dropped you an email for signup and activation!'});
+        });
+      });
+    }
+  }); 
+};
+
+exports.check = function(req, res, next) {
+//  var token = req.query["token"];
+  var token = req.body.token;
+//    console.log('in check = ' + token);
+  As.findOne({ hashedEmail: token }, function(err, data) {
+    if(err) { return next(err) };
+    if(!data) {
+        return validationError(res, {message:config.tokenExp});
+    } else {
+      if ( data.verifyStatus == true) {
+//          console.log('already verified');
+        return validationError(res, {message:config.alreadyActive});
+      } else {
+          req.body.email = data.email;
+          return( next() );
+      }  
+    };
+  });  
+};
+
+// Status check middleware. Check if confirmation email has send before
+// note that the data will be expired in 1.5h, so the user can only be send another email after 1.5h
+// If there's no record in the database, then create a new recoad for the emailStatus
+exports.checkStatus = function(req, res, next) {
+  As.findOne({ email: req.body.email }, function(err, data) {
+    if (err) { 
+      return next(err); 
+    } else if ( data === null) {
+      return( next() );
+    } else if ( data.verifyStatus === true ) {
+        return validationError(res, {message:config.alreadyActive}); //AD: this will not allow a password reset request within 1.5 hrs of creation. Modify if needed.
+    } else {
+        return validationError(res, {message:'An email has been send before, please check your mail to activate your account or change password. Note that you can only get another mail after 1.5h. Thanks!'});
+    }
+  });  
 };

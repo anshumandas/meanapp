@@ -54,3 +54,6 @@ User.find({}).remove(function() {
 var Profile = require('../api/forms/profile');
 Profile.find({}).remove(function() {
 });
+//var As = require('../api/user/activate').As;
+//As.find({}).remove(function() {
+//});

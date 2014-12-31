@@ -6,24 +6,31 @@ angular.module('meanappApp')
       id: '@_id'
     },
     {
-      changePassword: {
-        method: 'PUT',
-        params: {
-          controller:'password'
-        }
-      },
-        //AD:added this for profile id save        
-      addProfileID: {
-        method: 'PUT',
-        params: {
-          controller:'addProfile'
-        }
-      },
-      get: {
-        method: 'GET',
-        params: {
-          id:'me'
-        }
-      }
+        //AD: this is for initiating registration
+          initiate: {
+            method: 'POST',
+            params: {
+              controller:'initiate'
+            }
+          },
+          changePassword: {
+            method: 'PUT',
+            params: {
+              controller:'password'
+            }
+          },
+            //AD:added this for profile id save        
+          addProfileID: {
+            method: 'PUT',
+            params: {
+              controller:'addProfile'
+            }
+          },
+          get: {
+            method: 'GET',
+            params: {
+              id:'me'
+            }
+          }
 	  });
   });

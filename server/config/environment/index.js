@@ -31,7 +31,12 @@ var all = {
 
   // List of user roles
   userRoles: ['guest', 'user', 'admin'],
-
+  //List of auth types
+  authTypes: ['github', 'twitter', 'facebook', 'google'],
+  emailExistsMsg: 'The specified email address is already in use.',
+  tokenExp: 'Token not found. Probably it has expired.',
+  alreadyActive: 'Your account has already been activated.', 
+    
   // MongoDB connection options
   mongo: {
     options: {
@@ -57,6 +62,20 @@ var all = {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+  },
+    
+    //mailings
+  mailer: {
+    transport:    "SMTP", //or use "direct"
+    data: {
+              host: "mailtrap.io",
+              port: 2525,
+              auth: {
+                user: "27991710c302f0886",
+                pass: "2da0956ef247ef"
+              }
+            },
+    defaultFromAddress: 'MeanApp <admin@example.com>'
   }
 };
 

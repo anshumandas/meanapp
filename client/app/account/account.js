@@ -13,6 +13,21 @@ angular.module('meanappApp')
         templateUrl: 'app/account/signup/signup.html',
         controller: 'SignupCtrl'
       })
+      .state('complete', {
+        url: '/complete/:hash',
+        templateUrl: 'app/account/signup/signupComplete.html',
+        controller: 'SignupCtrl'
+      })
+      .state('reset', {
+        url: '/reset',
+        templateUrl: 'app/account/reset/reset.html',
+        controller: 'ResetCtrl'
+      })
+      .state('resetComplete', {
+        url: '/resetComplete/:hash',
+        templateUrl: 'app/account/reset/resetComplete.html',
+        controller: 'ResetCtrl'
+      })
       .state('chpwd', {
         url: '/chpwd',
         templateUrl: 'app/account/chpwd/chpwd.html',
@@ -27,7 +42,7 @@ angular.module('meanappApp')
       })
       .state('profile.new', {
         url: '/new',
-        templateUrl: 'partials/base-form.html',
+        templateUrl: 'partials/edit-form.html',
         controller: 'BaseCtrl',
 //        onExit: function($stateParams, $state){
 //            //AD: gets called after $stateChangeStart
@@ -35,15 +50,12 @@ angular.module('meanappApp')
       })
       .state('profile.edit', {
         url: '/:pid/edit',
-        templateUrl: 'partials/base-form.html',
+        templateUrl: 'partials/edit-form.html',
         controller: 'BaseCtrl'
       })
-      .state('reset', {
-        url: '/reset',
-        templateUrl: 'app/account/reset/reset.html',
-        controller: 'ResetCtrl'
-      });
+      .state('profile.view', {
+        url: '/:pid/edit',
+        templateUrl: 'partials/view-form.html',
+        controller: 'BaseCtrl'
+      })
   });
-//.factory('ProfileSchema', function($resource) {
-//  return $resource('/api/schema/profile'); // Note the full endpoint address
-//})

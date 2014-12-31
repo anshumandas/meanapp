@@ -7,6 +7,8 @@ module.exports = {
   mongo: {
     uri: 'mongodb://localhost/meanapp-dev'
   },
-
+  mailer: {
+    data: {debug: true}
+  },
   seedDB: true
 };

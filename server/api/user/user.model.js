@@ -2,9 +2,9 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var crypto = require('crypto');
-var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var ProfileSchema = require('../forms/profile');
+var config = require('../../config/environment');
+var crypt = require('../../components/crypt');
 
 var userRankOptions = 'newbie, explorer, champion, guru'.split(', ');
 
@@ -12,9 +12,9 @@ var UserSchema = new Schema({
 //AD: changed name to nickname
 //  name: String,
   nickname: {type: String, required: true, index: { unique: true } }, //let user choose unique virtual identity post login. 
-  email: { type: String, lowercase: true },
+  email: { type: String, lowercase: true, required: true, index: { unique: true } },
 //AD: added enum
-  role: {type: String, default : 'user', enum: ['admin', 'user']},
+  role: {type: String, default : 'user', enum: config.userRoles},
   hashedPassword: String,
   provider: String,
   salt: String,
@@ -38,8 +38,8 @@ UserSchema
   .virtual('password')
   .set(function(password) {
     this._password = password;
-    this.salt = this.makeSalt();
-    this.hashedPassword = this.encryptPassword(password);
+    this.salt = crypt.makeSalt();
+    this.hashedPassword = crypt.encrypt(password, this.salt);
   })
   .get(function() {
     return this._password;
@@ -88,7 +88,7 @@ UserSchema
 UserSchema
   .path('email')
   .validate(function(email) {
-    if (authTypes.indexOf(this.provider) !== -1) return true;
+    if (config.authTypes.indexOf(this.provider) !== -1) return true;
     return email.length;
 }, 'Email cannot be blank');
 
@@ -96,7 +96,7 @@ UserSchema
 UserSchema
   .path('hashedPassword')
   .validate(function(hashedPassword) {
-    if (authTypes.indexOf(this.provider) !== -1) return true;
+    if (config.authTypes.indexOf(this.provider) !== -1) return true;
     return hashedPassword.length;
 }, 'Password cannot be blank');
 
@@ -113,7 +113,7 @@ UserSchema
       }
       respond(true);
     });
-}, 'The specified email address is already in use.');
+}, config.emailExistsMsg); 
 
 var validatePresenceOf = function(value) {
   return value && value.length;
@@ -124,9 +124,9 @@ var validatePresenceOf = function(value) {
  */
 UserSchema
   .pre('save', function(next) {
-    if (!this.isNew) return next();
+    if (!this.isNew) return next(); //AD: probably should use : !password.isModified() also
 
-    if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
+    if (!validatePresenceOf(this.hashedPassword) && config.authTypes.indexOf(this.provider) === -1)
       next(new Error('Invalid password'));
     else
       next();
@@ -138,37 +138,15 @@ UserSchema
 UserSchema.methods = {
   /**
    * Authenticate - check if the passwords are the same
-   *
+   * AD: added the locked/deleted state logic
    * @param {String} plainText
    * @return {Boolean}
    * @api public
    */
   authenticate: function(plainText) {
-    return this.encryptPassword(plainText) === this.hashedPassword;
+    return this.state === 'active' && crypt.encrypt(plainText, this.salt) === this.hashedPassword;
   },
-
-  /**
-   * Make salt
-   *
-   * @return {String}
-   * @api public
-   */
-  makeSalt: function() {
-    return crypto.randomBytes(16).toString('base64');
-  },
-
-  /**
-   * Encrypt password
-   *
-   * @param {String} password
-   * @return {String}
-   * @api public
-   */
-  encryptPassword: function(password) {
-    if (!password || !this.salt) return '';
-    var salt = new Buffer(this.salt, 'base64');
-    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
-  }
+     
 };
 
 module.exports = mongoose.model('User', UserSchema);

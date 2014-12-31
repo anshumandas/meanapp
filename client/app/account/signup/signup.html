@@ -8,21 +8,6 @@
     <div class="col-sm-12">
       <form class="form" name="form" ng-submit="register(form)" novalidate>
 
-        <div class="form-group" ng-class="{ 'has-success': form.nickname.$valid && submitted,
-                                            'has-error': form.nickname.$invalid && submitted }">
-          <label>Nickname</label>
-
-          <input type="text" name="nickname" class="form-control" ng-model="user.nickname"
-                 required
-                 mongoose-error/>
-          <p class="help-block" ng-show="form.nickname.$error.required && submitted">
-            A unique nickname is required. 
-          </p>
-          <p class="help-block" ng-show="form.nickname.$error.mongoose">
-            {{ errors.nickname }}
-          </p>
-        </div>
-
         <div class="form-group" ng-class="{ 'has-success': form.email.$valid && submitted,
                                             'has-error': form.email.$invalid && submitted }">
           <label>Email</label>
@@ -36,25 +21,8 @@
           <p class="help-block" ng-show="form.email.$error.required && submitted">
             What's your email address?
           </p>
-          <p class="help-block" ng-show="form.email.$error.mongoose">
-            {{ errors.email }}
-          </p>
-        </div>
-
-        <div class="form-group" ng-class="{ 'has-success': form.password.$valid && submitted,
-                                            'has-error': form.password.$invalid && submitted }">
-          <label>Password</label>
-
-          <input type="password" name="password" class="form-control" ng-model="user.password"
-                 ng-minlength="3"
-                 required
-                 mongoose-error/>
-          <p class="help-block"
-             ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
-            Password must be at least 3 characters.
-          </p>
-          <p class="help-block" ng-show="form.password.$error.mongoose">
-            {{ errors.password }}
+          <p class="help-block" ng-show="form.email.$error.mongoose && submitted">
+            {{ errors.email }}<span ng-show="showFP"> Did you <a href="/reset">forget password</a>.</span>
           </p>
         </div>
 

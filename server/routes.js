@@ -29,7 +29,7 @@ module.exports = function(app) {
     fs.readdirSync(modelsPath).forEach(function (file) {
     var fname = modelsPath + '/' + file;
     if (fs.statSync(fname).isFile()) {
-        console.log(fname);
+//        console.log(fname);
         DataFormHandler.newResource(require(fname));
       }
     });
