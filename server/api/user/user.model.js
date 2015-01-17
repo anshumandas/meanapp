@@ -27,7 +27,7 @@ var UserSchema = new Schema({
   lastActivity: {type: Date, default: Date.now}, //all actions must change this
   activityCount: Number, //can be used to upgrade rank later on. Some activities can have higher weights
   rank: {type: String, default : 'newbie', enum: userRankOptions},  
-  state: {type: String, default : 'active', enum: ['active', 'locked', 'deleted']},
+  state: {type: String, default : 'active', enum: ['active', 'locked', 'deleted', 'blocked']},
   details: {type: mongoose.Schema.Types.ObjectId, ref: 'profile'}
 });
 

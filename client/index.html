@@ -33,11 +33,12 @@
       <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
       <!-- injector:css -->
-      <link rel="stylesheet" href="app/account/login/login.css">
       <link rel="stylesheet" href="app/account/profile/profile.css">
       <link rel="stylesheet" href="app/admin/admin.css">
       <link rel="stylesheet" href="app/app.css">
       <link rel="stylesheet" href="app/main/main.css">
+      <link rel="stylesheet" href="app/welcome/welcome.css">
+      <link rel="stylesheet" href="components/loginModal/login.css">
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
@@ -119,13 +120,12 @@
     <!-- endbuild -->
 
     <script src="//cdn.ckeditor.com/4.4.4/standard/ckeditor.js"></script>
-
+      
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
           <script src="app/account/account.js"></script>
           <script src="app/account/chpwd/chpwd.controller.js"></script>
-          <script src="app/account/login/login.controller.js"></script>
           <script src="app/account/profile/profile.controller.js"></script>
           <script src="app/account/reset/reset.controller.js"></script>
           <script src="app/account/signup/signup.controller.js"></script>
@@ -133,10 +133,17 @@
           <script src="app/admin/admin.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/welcome/welcome.controller.js"></script>
+          <script src="app/welcome/welcome.js"></script>
           <script src="components/auth/auth.service.js"></script>
-          <script src="components/auth/user.service.js"></script>
+          <script src="components/auth/user.model.js"></script>
+          <script src="components/loginModal/loginModal.controller.js"></script>
+          <script src="components/loginModal/loginModal.service.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/site/site.model.js"></script>
+          <script src="components/site/siteHandler.service.js"></script>
+          <script src="components/slideshow/slideshow.directive.js"></script>
           <script src="components/socket/socket.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->

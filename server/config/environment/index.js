@@ -64,17 +64,9 @@ var all = {
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
   },
     
-    //mailings
+//mailings
   mailer: {
-    transport:    "SMTP", //or use "direct"
-    data: {
-              host: "mailtrap.io",
-              port: 2525,
-              auth: {
-                user: "27991710c302f0886",
-                pass: "2da0956ef247ef"
-              }
-            },
+    transport:    "direct",
     defaultFromAddress: 'MeanApp <admin@example.com>'
   }
 };

@@ -45,7 +45,6 @@ var create = function (req, res, next) {
 //      var up = c + 1;
 //      newUser.nickname = firstname + "_" + up.toString(); 
       newUser.save(function(err, user) {
-          console.log(err);
         if (err) return validationError(res, err);         
         //set verify to true   
         //AD: do not use save as it triggers pre save that rehashes the token
@@ -66,11 +65,16 @@ var create = function (req, res, next) {
 
 exports.createOrReset = function (req, res, next) {
 //AD: this can be called for new user or password reset
+
 //Check if user exists
   User.findOne({email: req.body.email}, '-salt -hashedPassword', function (err, user) {
     if (user) {
+      //If blocked then exit.
+      if(user.state === 'blocked') return validationError(res, {message:'User is blocked by administrator.'});
 //this is for password reset and unlocking
-      user.password = req.body.password;        
+      user.password = req.body.password; 
+      user.state = 'active'; //locked and deleted wil get updated
+      user.provider = 'local'; // converts to lcal strategy even if earlier was OAuth
       user.save(function(err, user) {
         if (err) return validationError(res, err);         
         As.update({ hashedEmail: req.body.token }, { $set: { verifyStatus: true }}, {}, function(err, data) { });
@@ -102,7 +106,7 @@ exports.show = function (req, res, next) {
  * Deletes a user
  * restriction: 'admin'
  */
-exports.destroy = function(req, res) {
+exports.destroy = function(req, res, next) {
 // AD: Only the profile gets deleted. The user record is never deleted but status marked as deleted
   var userId = req.params.id;
     
@@ -111,6 +115,7 @@ exports.destroy = function(req, res) {
     if (!user) return res.send(401).end();
     
     user.state = 'deleted';
+    user.lastActivity = Date.now; //last activity is delete
       
     if (!user.details) {
         user.save(function(err) {
@@ -202,38 +207,49 @@ exports.authCallback = function(req, res, next) {
  * AD: below functions are for the activation support
  */
 
-exports.initiate = function(req, res) {
-  console.log('initiating');
+exports.initiate = function(req, res, next) {
+  if(req.body.reset) {
+      console.log('initiating reset');
+  } else {
+      console.log('initiating signup');
+  }
   var _mail = req.body.email;
+  var reseting = req.body.reset;
   //AD: check if the user already exists
-  User.findOne({email: _mail}, '-salt -hashedPassword', function (err, users) {
-    if (users) {
-//AD: this is for the reset password case. If a signup request for existing user, just send a email to that user to warn.       
-      var activationStatus = new As({ email: _mail, hashedEmail: _mail, verifyStatus: false });
-      activationStatus.save(function(err, data) {
-        if(err) {
-          return next(err);
-        } 
-        mail.sendResetMail(data,function (err, responseStatus) {
-          //do something here for errors
-          console.log('Error: '+err);
-          if(!err) res.status(200).json({message:'Account exists. We have dropped you an email to reset your password!'});
-        });
-      });
-        
+  User.findOne({email: _mail}, '-salt -hashedPassword', function (err, user) {
+    var activationStatus;
+    if (user && user.state !== 'deleted') {
+      if(reseting) {  
+          activationStatus = new As({ email: _mail, hashedEmail: _mail, verifyStatus: false });
+          activationStatus.save(function(err, data) {
+            if(err) {
+              return next(err);
+            } 
+            mail.sendResetMail(data,function (err, responseStatus) {
+              //do something here for errors
+              console.log('Error: '+err);
+              if(!err) res.status(200).json({message:'Account exists. We have dropped you an email to reset your password!'});
+            });
+          });
+      } else {
+        return validationError(res, {message:'Account already exists. Try reseting the password'});          
+      }        
     } else {
-//AD: this is for the signup case
-      var activationStatus = new As({ email: _mail, hashedEmail: _mail, verifyStatus: false });
-      activationStatus.save(function(err, data) {
-        if(err) {
-          return next(err);
-        } 
-        mail.sendSignupMail(data,function (err, responseStatus) {
-          //do something here for errors
-          console.log('Error: '+err);
-          if(!err) res.status(200).json({message:'Account does not exist. We have dropped you an email for signup and activation!'});
-        });
-      });
+      if(reseting) { 
+        return validationError(res, {message:'Account does not exists. Try signup'});      
+      } else {
+          activationStatus = new As({ email: _mail, hashedEmail: _mail, verifyStatus: false });
+          activationStatus.save(function(err, data) {
+            if(err) {
+              return next(err);
+            } 
+            mail.sendSignupMail(data,function (err, responseStatus) {
+              //do something here for errors
+              console.log('Error: '+err);
+              if(!err) res.status(200).json({message:'Account does not exist. We have dropped you an email for signup and activation!'});
+            });
+          });
+      }
     }
   }); 
 };
@@ -243,18 +259,18 @@ exports.check = function(req, res, next) {
   var token = req.body.token;
 //    console.log('in check = ' + token);
   As.findOne({ hashedEmail: token }, function(err, data) {
-    if(err) { return next(err) };
+    if(err) { return next(err) }
     if(!data) {
         return validationError(res, {message:config.tokenExp});
     } else {
-      if ( data.verifyStatus == true) {
+      if ( data.verifyStatus === true) {
 //          console.log('already verified');
         return validationError(res, {message:config.alreadyActive});
       } else {
           req.body.email = data.email;
           return( next() );
       }  
-    };
+    }
   });  
 };
 

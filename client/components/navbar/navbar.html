@@ -9,7 +9,7 @@
             </button>
             <div class="pull-left">
                 <a class="navbar-brandpluslogo brandpluslogo" href="/">
-                    <a href="/" class="navbar-brand">meanapp</a>
+                    <a href="/" class="navbar-brand">{{site.name}}</a>
                 </a>
             </div>
 <!--            <div class="visible-lg visible-desktop pull-right col-md-1 span1"></div>-->
@@ -50,8 +50,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     
-                    <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup">Sign up</a></li>
-                    <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login">Login</a></li>
+                    <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href ng-click="login(true)">Sign up</a></li>
+                    <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href ng-click="login(false)">Login</a></li>
                     <li ng-show="isLoggedIn()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Hello {{ getCurrentUser().nickname }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-hide="getCurrentUser().details" ui-sref="profile.new">Create Profile</a></li>

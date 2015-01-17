@@ -6,36 +6,6 @@ angular.module('meanappApp')
     $scope.user = {};
     $scope.errors = {};
 
-    $scope.register = function(form) {
-      $scope.submitted = true;
-      $scope.showLogin=false;
-      $scope.showReset=false;
-        
-      if(form.$valid) {          
-        Auth.initiateReg({
-          email: $scope.user.email
-        })
-        .then( function(res) {
-            //AD: this part is used to show the success message
-            var message = res.message;
-            $scope.errors = {};
-
-            form['email'].$setValidity('mongoose', false);
-            $scope.errors['email'] = message;
-                          
-        })
-        .catch( function(err) {
-            var message = err.data.message;
-            console.log(message);
-            $scope.errors = {};
-
-            form['email'].$setValidity('mongoose', false);
-            $scope.errors['email'] = message;
-                     
-        });
-      }
-    };        
-
     $scope.activate = function(form) {
       $scope.submitted = true;
       $scope.showLogin=false;
@@ -46,9 +16,9 @@ angular.module('meanappApp')
           token: $stateParams.hash,
           password: $scope.user.password
         })
-        .then( function(res) {
+        .then( function(){//res) {
           // Account created. Go to home.
-          $location.path('/');
+          $location.path('/main');
         })
         .catch( function(err) {
             console.log(err);
@@ -56,11 +26,10 @@ angular.module('meanappApp')
           $scope.errors = {};
 
           if(!err.errors) {              
-            $scope.errors['message'] = err.message;
-            if(err.message == 'Token not found. Probably it has expired.'){ //AD: see in environment config
+            $scope.errors.message = err.message;
+            if(err.message === 'Token not found. Probably it has expired.'){ //AD: see in environment config
                 $scope.showSignup=true;
-            } else if(err.message == 'Your account has already been activated.'){ //AD: see in environment config
-                console.log('here');
+            } else if(err.message === 'Your account has already been activated.'){ //AD: see in environment config
                 $scope.showLogin=true;
             }                        
           } else {
@@ -74,7 +43,4 @@ angular.module('meanappApp')
       }
     };
       
-    $scope.loginOauth = function(provider) {
-      $window.location.href = '/auth/' + provider;
-    };
   });

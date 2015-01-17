@@ -8,7 +8,7 @@ angular.module('meanappApp')
 
     $scope.delete = function(user) {
       User.remove({ id: user._id },
-          function(data) {
+          function(){//data) {
             //AD: corrected this as earlier, the view delete occurred even without server delete
             angular.forEach($scope.users, function(u, i) {
             if (u === user) {

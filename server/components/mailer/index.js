@@ -11,7 +11,7 @@ exports.sendSignupMail = function(data, fn){
      var locals = {
        email: data.email,
        subject: 'Signup Confirmation',
-       url: 'http://localhost:9000' + '/complete/' + data.hashedEmail
+       url: process.env.DOMAIN + '/complete/' + data.hashedEmail
      };
      this.sendOne('signup', locals, function (err, response) {
         if (err) {
@@ -26,7 +26,7 @@ exports.sendResetMail = function(data, fn){
      var locals = {
        email: data.email,
        subject: 'Password Reset',
-       url: 'http://localhost:9000' + '/resetComplete/' + data.hashedEmail
+       url: process.env.DOMAIN + '/resetComplete/' + data.hashedEmail
      };
      this.sendOne('password_reset', locals, function (err, response) {
         if (err) {

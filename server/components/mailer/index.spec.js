@@ -12,13 +12,13 @@ describe('mailer: models', function () {
        email: 'one@example.com',
        subject: 'Password reset',
        name: 'Forgetful User',
-       resetUrl: 'http;//localhost:9000/password_rest/000000000001|afdaevdae353'
+       url: 'http;//localhost:9000/password_rest/000000000001|afdaevdae353'
      };
      mailer.sendOne('password_reset', locals, function (err, responseStatus, html, text) {
        should.not.exist(err);
        responseStatus.should.include("OK");
-       text.should.include("Please follow this link to reset your password " + locals.resetUrl);
-       html.should.include("Please follow this link to reset your password <a href=\"" + locals.resetUrl + "\">" + locals.resetUrl + "</a>");
+       text.should.include("Please follow this link to reset your password " + locals.url);
+       html.should.include("Please follow this link to reset your password <a href=\"" + locals.url + "\">" + locals.url + "</a>");
        done();
      });
    });

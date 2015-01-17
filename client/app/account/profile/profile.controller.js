@@ -6,9 +6,9 @@ angular.module('meanappApp')
 
 //AD: for state name
     $scope.getStateName = function() {
-        if($state.current.name === 'profile.edit') return "Edit";
-        if($state.current.name === 'profile.new') return "Create";
-        return "View";
+        if($state.current.name === 'profile.edit') { return 'Edit'; }
+        if($state.current.name === 'profile.new') { return 'Create'; }
+        return 'View';
       };
       
 //AD: this is to control angular forms
@@ -27,7 +27,7 @@ angular.module('meanappApp')
         console.log('some issue');
     });      
   };
-  $scope.dataEventFunctions.onAfterUpdate = function (data, old) {
+  $scope.dataEventFunctions.onAfterUpdate = function (){//data, old) {
 //    alert('Here is an example onAfterUpdate event. ' + JSON.stringify(data));
     $state.go('main');//profile.edit, toParams, {notify: false}); 
   };

@@ -1,0 +1,114 @@
+<div class="modal-body">
+    <tabset>
+        <tab heading="Sign in">
+            <div class="well">  
+              <div class="row">
+                  <div class="col-xs-6 verticalLine">
+                    <form class="form" name="form" ng-submit="login(form)" novalidate ng-controller="SignInCtrl">           
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" ng-model="user.email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" ng-model="user.password" 
+                 ng-minlength="3" required>
+                        </div>
+                        <div class="form-group has-error">
+                            <p class="help-block"
+                             ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
+                            Password must be at least 3 characters.
+                            </p>
+                            <p class="help-block" ng-show="(form.email.$error.required || form.email.$error.email) && submitted">
+                            Please enter your valid email. 
+                            </p>
+                            <p class="help-block">{{ errors.other }}</p>
+                        </div>
+<!--
+                        <span class="button-checkbox" ng-init="initRemember()">
+                            <button type="button" class="btn" data-color="info">Remember Me</button>
+                            <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden">
+                        </span>
+-->
+                        <hr class="colorgraph">
+                        <div>
+                            <button class="btn btn-success btn-block btn-lg btn-primary btn-login" type="submit">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-6 text-center">
+                    <h4>Or Connect With</h4>
+                    <hr class="colorgraph">
+                    <div class="row-fluid">                        
+                        <a ng-repeat="auth in auths" class="btn btn-primary social-login-btn {{auth.clazz}}" role="button" href="" ng-click="loginOauth(auth.provider)" popover="{{auth.text}}" popover-trigger="mouseenter" >
+                            <i class="{{auth.icon}}"></i>
+                        </a>
+                    </div>                    
+                </div>
+              </div>
+            </div>
+        </tab>
+        <tab heading="Sign up" active="isSignup">
+            <div class="well">  
+              <div class="row">
+                <div class="col-xs-6 text-center verticalLine">
+                    <h4>Use existing login of</h4>
+                    <hr class="colorgraph">
+                    <div class="row-fluid">                        
+                        <a ng-repeat="auth in auths" class="btn btn-primary social-login-btn {{auth.clazz}}" role="button" href="" ng-click="loginOauth(auth.provider)" popover="{{auth.text}}" popover-trigger="mouseenter" >
+                            <i class="{{auth.icon}}"></i>
+                        </a>
+                    </div>                    
+                </div>
+                  <div class="col-xs-6 text-center">
+                    <h4>Or your email</h4>
+                    <hr class="colorgraph">
+                    <form class="form" name="form" ng-submit="signup(form)" novalidate ng-controller="SignUpCtrl">           
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" ng-model="user.email" required>
+                        </div>
+                        <div class="form-group has-error">                            
+                          <p class="help-block" ng-show="form.email.$error.email && submitted">
+                            Doesn't look like a valid email.
+                          </p>
+                          <p class="help-block" ng-show="form.email.$error.required && submitted">
+                            What's your email address?
+                          </p>
+                          <p class="help-block">{{ errors.other }}</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-block btn-lg btn-primary btn-login" type="submit">
+                                Signup
+                            </button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>   
+        </tab>
+        <tab heading="Forgot Password">
+            <div class="well">
+              <form class="form" name="form" ng-submit="reset(form)" novalidate ng-controller="SignUpCtrl">           
+                <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" ng-model="user.email" required>
+                </div>
+                <div class="form-group has-error">                            
+                  <p class="help-block" ng-show="form.email.$error.email && submitted">
+                    Doesn't look like a valid email.
+                  </p>
+                  <p class="help-block" ng-show="form.email.$error.required && submitted">
+                    What's your email address?
+                  </p>
+                  <p class="help-block">{{ errors.other }}</p>
+                </div>
+                <div>
+                  <button class="btn btn-success btn-block btn-lg btn-primary btn-login" type="submit">
+                    Reset Password
+                  </button>
+                </div>
+              </form>
+            </div>
+        </tab>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">×</button>
+    </tabset>
+</div>

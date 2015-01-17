@@ -3,25 +3,10 @@
 angular.module('meanappApp')
   .config(function ($stateProvider) {
     $stateProvider
-      .state('login', {
-        url: '/login',
-        templateUrl: 'app/account/login/login.html',
-        controller: 'LoginCtrl'
-      })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: 'app/account/signup/signup.html',
-        controller: 'SignupCtrl'
-      })
       .state('complete', {
         url: '/complete/:hash',
         templateUrl: 'app/account/signup/signupComplete.html',
-        controller: 'SignupCtrl'
-      })
-      .state('reset', {
-        url: '/reset',
-        templateUrl: 'app/account/reset/reset.html',
-        controller: 'ResetCtrl'
+        controller: 'ActivateCtrl'
       })
       .state('resetComplete', {
         url: '/resetComplete/:hash',
@@ -57,5 +42,5 @@ angular.module('meanappApp')
         url: '/:pid/edit',
         templateUrl: 'partials/view-form.html',
         controller: 'BaseCtrl'
-      })
+      });
   });

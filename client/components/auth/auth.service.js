@@ -60,12 +60,10 @@ angular.module('meanappApp')
         var cb = callback || angular.noop;
 
         return User.initiate(user,
-          function(data) {
-//            $cookieStore.put('token', data.token);
+          function(){
             return cb(user);
           },
           function(err) {
-//            this.logout();
             return cb(err);
           }.bind(this)).$promise;
       },        

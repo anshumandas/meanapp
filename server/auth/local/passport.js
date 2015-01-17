@@ -15,7 +15,7 @@ exports.setup = function (User, config) {
         if (!user) {
           return done(null, false, { message: 'This email is not registered.' });
         }
-        if (user.state != 'active') {
+        if (user.state !== 'active') {
           return done(null, false, { message: 'This user is either locked or deleted state. Try using "forgot password" button.' });
         }
         if (!user.authenticate(password)) {

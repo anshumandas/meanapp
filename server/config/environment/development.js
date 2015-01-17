@@ -8,7 +8,16 @@ module.exports = {
     uri: 'mongodb://localhost/meanapp-dev'
   },
   mailer: {
-    data: {debug: true}
+    transport:"SMTP",
+    data: {
+        debug: true,
+        host: "mailtrap.io",
+        port: 2525,
+        auth: {
+            user: process.env.MAILTRAP_ID,
+            pass: process.env.MAILTRAP_SECRET
+        }  
+    }
   },
   seedDB: true
 };
