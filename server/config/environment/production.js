@@ -19,15 +19,19 @@ module.exports = {
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://localhost/meanapp'
-  },
+  },  
   mailer: {
-//    data: {
-//              host: "your_host",
-//              port: 2525,
-//              auth: {
-//                user: "id",
-//                pass: "secret"
-//              } //or use OAuth2
-//          }
+    transport:"SMTP",
+    data: {
+       service: 'gmail',
+       auth: {
+            XOAuth2: {    
+                user: process.env.ADMIN_EMAIL,
+                clientId: process.env.GOOGLE_ID,
+                clientSecret: process.env.GOOGLE_SECRET,
+                refreshToken: process.env.GOOGLE_TOKEN
+            }
+       }
+    }
   }
 };

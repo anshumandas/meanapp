@@ -14,39 +14,39 @@ angular.module('meanappApp')
     },
     {
         provider:'facebook',
-        icon:"fa fa-facebook",
+        icon:'fa fa-facebook',
         clazz:'social-facebook',
-        text:"Facebook"
+        text:'Facebook'
     },
     {
         provider:'twitter',
-        icon:"fa fa-twitter",
+        icon:'fa fa-twitter',
         clazz:'social-twitter',
-        text:"Twitter"
+        text:'Twitter'
     },
     {
         provider:'github',
-        icon:"fa fa-github-alt",
+        icon:'fa fa-github-alt',
         clazz:'social-github',
-        text:"GitHub"
+        text:'GitHub'
     },
     {
         provider:'linkedin',
-        icon:"fa fa-linkedin",
+        icon:'fa fa-linkedin',
         clazz:'social-linkedin',
-        text:"LinkedIn"
+        text:'LinkedIn'
     },
     {
         provider:'dropbox',
-        icon:"fa fa-dropbox",
+        icon:'fa fa-dropbox',
         clazz:'social-github',
-        text:"DropBox"
+        text:'DropBox'
     },
     {
         provider:'amazon',
-        icon:"zocial-amazon",
+        icon:'zocial-amazon',
         clazz:'social-facebook',
-        text:"Amazon"
+        text:'Amazon'
     },         
     {
         provider:'windows',
@@ -54,20 +54,20 @@ angular.module('meanappApp')
         clazz:'social-google',
         text:'Windows Live'
     }
-//    "fa fa-tumblr-sign" - Tumblr
-//    "zocial-bitbucket" - Bitbucket
-//    "zocial-evernote" - Evernote
-//    "zocial-meetup" - Meetup
-//    "fa fa-weibo" - Weibo
-//    "fa fa-foursquare" - Foursquare
-//    "fa fa-stackexchange" - Stack Exchange
-//    "fa fa-trello" - Trello
-//    "zocial-wordpress" - Wordpress
+//    'fa fa-tumblr-sign' - Tumblr
+//    'zocial-bitbucket' - Bitbucket
+//    'zocial-evernote' - Evernote
+//    'zocial-meetup' - Meetup
+//    'fa fa-weibo' - Weibo
+//    'fa fa-foursquare' - Foursquare
+//    'fa fa-stackexchange' - Stack Exchange
+//    'fa fa-trello' - Trello
+//    'zocial-wordpress' - Wordpress
     ];
 
     $scope.cancel = function(){
       $modalInstance.dismiss('cancel');
-    }
+    };
 
     $scope.loginOauth = function(provider) {
       $window.location.href = '/auth/' + provider;
@@ -75,7 +75,7 @@ angular.module('meanappApp')
       
     $scope.done = function(data){
       $modalInstance.close(data);
-    }
+    };
 })
 .controller('SignInCtrl', function ($scope, Auth) {
 
@@ -127,7 +127,7 @@ angular.module('meanappApp')
 //        function updateDisplay() {
 //            var isChecked = $checkbox.is(':checked');
 //            // Set the button's state
-//            $button.data('state', (isChecked) ? "on" : "off");
+//            $button.data('state', (isChecked) ? 'on' : 'off');
 //
 //            // Set the button's icon
 //            $button.find('.state-icon')
@@ -151,7 +151,7 @@ angular.module('meanappApp')
 //            updateDisplay();
 //            // Inject the icon if applicable
 //            if ($button.find('.state-icon').length == 0) {
-//                $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+//                $button.prepend('<i class='state-icon ' + settings[$button.data('state')].icon + ''></i> ');
 //            }
 //        }
 //        init();

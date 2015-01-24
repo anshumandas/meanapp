@@ -245,7 +245,7 @@ exports.initiate = function(req, res, next) {
             } 
             mail.sendSignupMail(data,function (err, responseStatus) {
               //do something here for errors
-              console.log('Error: '+err);
+              console.log('mail Error: '+err);
               if(!err) res.status(200).json({message:'Account does not exist. We have dropped you an email for signup and activation!'});
             });
           });

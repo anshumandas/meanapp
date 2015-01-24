@@ -21,8 +21,6 @@ angular.module('meanappApp')
     $scope.isAdmin = Auth.isAdmin;
     $scope.getCurrentUser = Auth.getCurrentUser;
       
-    var $http, $state;
- 
     $scope.logout = function() {
       Auth.logout();
       $location.path('/welcome');

@@ -1,4 +1,4 @@
-.welcome { #does not seem to work without using style
+.welcome { /**does not seem to work without using style **/
     position:absolute;
     x:0;
     y:0;

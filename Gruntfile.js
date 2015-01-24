@@ -16,7 +16,8 @@ module.exports = function (grunt) {
     ngtemplates: 'grunt-angular-templates',
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    shell: 'grunt-shell'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -56,15 +57,15 @@ module.exports = function (grunt) {
     watch: {
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
+          '<%= yeoman.client %>/{app,components,partials}/**/*.js',
+          '!<%= yeoman.client %>/{app,components,partials}/**/*.spec.js',
+          '!<%= yeoman.client %>/{app,components,partials}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
         tasks: ['injector:scripts']
       },
       injectCss: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.css'
+          '<%= yeoman.client %>/{app,components,partials}/**/*.css'
         ],
         tasks: ['injector:css']
       },
@@ -74,8 +75,8 @@ module.exports = function (grunt) {
       },
       jsTest: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '<%= yeoman.client %>/{app,components}/**/*.mock.js'
+          '<%= yeoman.client %>/{app,components,partials}/**/*.spec.js',
+          '<%= yeoman.client %>/{app,components,partials}/**/*.mock.js'
         ],
         tasks: ['newer:jshint:all', 'karma']
       },
@@ -84,11 +85,11 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-          '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
-          '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
+          '{.tmp,<%= yeoman.client %>}/{app,components,partials}/**/*.css',
+          '{.tmp,<%= yeoman.client %>}/{app,components,partials}/**/*.html',
+          '{.tmp,<%= yeoman.client %>}/{app,components,partials}/**/*.js',
+          '!{.tmp,<%= yeoman.client %>}{app,components,partials}/**/*.spec.js',
+          '!{.tmp,<%= yeoman.client %>}/{app,components,partials}/**/*.mock.js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -129,14 +130,14 @@ module.exports = function (grunt) {
         src: ['server/**/*.spec.js']
       },
       all: [
-        '<%= yeoman.client %>/{app,components}/**/*.js',
-        '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-        '!<%= yeoman.client %>/{app,components}/**/*.mock.js'
+        '<%= yeoman.client %>/{app,components,partials}/**/*.js',
+        '!<%= yeoman.client %>/{app,components,partials}/**/*.spec.js',
+        '!<%= yeoman.client %>/{app,components,partials}/**/*.mock.js'
       ],
       test: {
         src: [
-          '<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '<%= yeoman.client %>/{app,components}/**/*.mock.js'
+          '<%= yeoman.client %>/{app,components,partials}/**/*.spec.js',
+          '<%= yeoman.client %>/{app,components,partials}/**/*.mock.js'
         ]
       }
     },
@@ -321,12 +322,12 @@ module.exports = function (grunt) {
       },
       main: {
         cwd: '<%= yeoman.client %>',
-        src: ['{app,components}/**/*.html'],
+        src: ['{app,components,partials,reveal}/**/*.html'],
         dest: '.tmp/templates.js'
       },
       tmp: {
         cwd: '.tmp',
-        src: ['{app,components}/**/*.html'],
+        src: ['{app,components,partials,reveal}/**/*.html'],
         dest: '.tmp/tmp-templates.js'
       }
     },
@@ -350,6 +351,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             'bower_components/**/*',
+            'reveal/**/*',
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'index.html'
@@ -372,7 +374,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
-        src: ['{app,components}/**/*.css']
+        src: ['{app,components,partials,reveal}/**/*.css']
       }
     },
 
@@ -392,12 +394,39 @@ module.exports = function (grunt) {
       },
       openshift: {
         options: {
-          remote: 'openshift',
+          remote: 'ssh://54a6a8774382ec4dc200011b@meanapp-anshumandas.rhcloud.com/~/git/meanapp.git/',
           branch: 'master'
         }
       }
     },
-
+                   
+    shell: {
+        options: {
+          stdout: true,
+          stderr: true
+        },
+        stop: {
+          command: 'rhc app stop -a meanapp'
+        },
+        start: {
+          command: 'rhc app start -a meanapp'
+        } ,
+        setEnv: {
+          command: function () {
+                var cmds = [];
+                var p = require('./server/config/local.env');
+                for (var key in p) {
+                  if (p.hasOwnProperty(key)) {
+                    if(key === 'DOMAIN') p[key] = 'meanapp-anshumandas.rhcloud.com';
+                    var c = 'rhc set-env ' + key + '=\'' + p[key] + '\' -a meanapp';
+                    cmds.push(c);
+                  }
+                }
+                return cmds.join('&&');
+            }
+        }                   
+    },
+                   
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
@@ -495,7 +524,7 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/index.html': [
-            '<%= yeoman.client %>/{app,components}/**/*.css'
+            '<%= yeoman.client %>/{app,components,partials}/**/*.css'
           ]
         }
       }
@@ -610,6 +639,14 @@ module.exports = function (grunt) {
     'uglify',
     'rev',
     'usemin'
+  ]);
+
+  grunt.registerTask('deploy', [
+    'build',
+    'buildcontrol:openshift',
+    'shell:stop',
+    'shell:setEnv',
+    'shell:start'
   ]);
 
   grunt.registerTask('default', [

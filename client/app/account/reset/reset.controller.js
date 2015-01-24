@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meanappApp')
-  .controller('ResetCtrl', function ($scope, $stateParams, Auth, $location, $window) {
+  .controller('ResetCtrl', function ($scope, $stateParams, Auth, $location) {
    
     $scope.user = {};
     $scope.errors = {};

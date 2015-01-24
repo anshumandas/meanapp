@@ -85,7 +85,6 @@ angular.module('meanappApp', [
           event.preventDefault();
           LoginModal()
             .then(function () {
-console.log(next);
                 return $state.go(toState.name, toParams);
             })
             .catch(function () {

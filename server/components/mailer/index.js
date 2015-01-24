@@ -5,8 +5,6 @@ var templatesDir = path.resolve(__dirname, '../..', 'views/mailer');
 var emailTemplates = require('email-templates');
 
 var EmailAddressRequiredError = new Error('email address required');
-var transport = nodemailer.createTransport(config.mailer.transport, config.mailer.data);
-
 exports.sendSignupMail = function(data, fn){
      var locals = {
        email: data.email,
@@ -15,7 +13,7 @@ exports.sendSignupMail = function(data, fn){
      };
      this.sendOne('signup', locals, function (err, response) {
         if (err) {
-            //console.log(err);
+            console.log(err);
             return fn(err);
         }
         return fn(null, response);
@@ -62,14 +60,20 @@ exports.sendOne = function (templateName, locals, fn) {
      if (process.env.NODE_ENV === 'test') {
        return fn(null, '250 2.0.0 OK 1350452502 s5sm19782310obo.10', html, text);
      }
-     transport.sendMail({
-       from: config.mailer.defaultFromAddress,
-       to: locals.email,
-       subject: locals.subject,
-       html: html,
-       // generateTextFromHTML: true,
-       text: text
-     }, function (err, responseStatus) {
+    
+    console.log(config.mailer.data);
+       
+    var transport = nodemailer.createTransport(config.mailer.transport, config.mailer.data);
+    var mailconfig = {
+           from: config.mailer.defaultFromAddress,
+           to: locals.email,
+           subject: locals.subject,
+           html: html,
+           // generateTextFromHTML: true,
+           text: text
+         };
+       
+     transport.sendMail(mailconfig, function (err, responseStatus) {
        if (err) {
          return fn(err);
        }

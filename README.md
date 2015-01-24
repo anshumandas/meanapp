@@ -1,4 +1,4 @@
-MEANapp
+[MEANapp](http://meanapp-anshumandas.rhcloud.com/)
 =======
 A large web application boilerplate code using **MEAN stack** *built by extending <a href="http://yeoman.io/">Yeoman</a> <a href="https://github.com/DaftMonk/generator-angular-fullstack">angular-fullstack</a>*
 
@@ -12,6 +12,7 @@ Added Features:
  5. Modal authentication workflow
  6. Welcome page with Reveal.js slideshow that gets content from backend model
  7. Full site schema for a model controlled view 
+ 8. Deployed demo in openshift 
 
 Future work:
 ---
@@ -20,7 +21,7 @@ Future work:
  3. Blocked user handling with admin facility.
  4. Password rules, with mandatory change period settings.
  5. User roles and groups, priviledges and its administration
- 6. Check out Themes of Bootstrap. Add themes support. Make Paper theme for Material Design as default.
+ 6. Check out Themes of Bootstrap. Add themes support for reveal also. Make Paper theme for Material Design as default.
  7. Add FB, Twitter, G+ like/share buttons in nav with back end boiler plate. 
  8. Create getting started etc. pages and UI-router based full site
  9. Add side panel menus
@@ -46,11 +47,14 @@ Install [MongoDB](http://www.mongodb.org/downloads) - check [manual](http://docs
 Install Git from [GitHub](http://github-windows.s3.amazonaws.com/GitHubSetup.exe)
 
 > npm install -g grunt-cli
+
 > npm install -g bower
+
 > git clone https://github.com/anshumandas/meanapp.git
 
 To start first start **mongod** (possibly in C:\Mongo\bin). Then:
 > cd meanapp
+
 > grunt serve
 
 Check http://localhost:9000
@@ -153,9 +157,18 @@ __________________________________________________________________________
 **[Seventh Commit](https://github.com/anshumandas/meanapp/commit/935779b8acdce1fdcb90d970648d1a1200fc6939)** is an update only to this file
 __________________________________________________________________________
 
-**Eighth Commit:** 
+**[Eighth Commit](https://github.com/anshumandas/meanapp/commit/f2fea2a5b3a09b859aa09b0a0d560dcb02f8243f):** 
 
  - Updated the README.md file to use Mark Down format only
  - Created Welcome Page using Reveal.js (https://github.com/hakimel/reveal.js) as Angular directive inspired by http://jsfiddle.net/BinaryMuse/CXqAb/
  - Modal signup and login inspired by http://brewhouse.io/blog/2014/12/09/authentication-made-simple-in-single-page-angularjs-applications.html
  - Created a site Schema that is used populate site content
+ __________________________________________________________________________
+
+**[Ninth Commit]():** 
+
+ - Deployed demo on Openshift http://meanapp-anshumandas.rhcloud.com/
+ - Fixed few bugs and made changes to the Grunt.js file to make the demo work
+ - Since direct mail does not work in OpenShift used gmail with OAuth2
+ - Grunt task for Openshift deploy
+ - grunt cssmin has issue with @import.  So copied the css from the import url in login.css

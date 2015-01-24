@@ -31,7 +31,7 @@ angular.module('meanappApp')
       
       var updateSlides = function(slides, config, elem) { 
           
-        if(!slides || slides.length === 0) return;
+        if(!slides || slides.length === 0) { return; }
           
         elem.addClass('slides');
         for (var i = 0; i < slides.length; i++) {
@@ -55,7 +55,7 @@ angular.module('meanappApp')
         }
         
           updateSettings(config);
-    }
+    };
             
     var updateSettings = function(config) { 
         var settings = { 
@@ -71,18 +71,18 @@ angular.module('meanappApp')
         if(config) { 
             if(config.theme) {            
               settings.theme =  config.theme; // available themes are in /css/theme
-            };            
+            }            
 
             if(config.transition) {            
               settings.transition =  config.transition; // available themes are in /css/theme
-            };
+            }
 
             if(config.background){            
               // Parallax scrolling            
               settings.parallaxBackgroundImage= config.background;
               settings.parallaxBackgroundSize= '2100px 900px';
-            };            
-        };
+            }            
+        }
             
         Reveal.initialize(settings);          
     };
@@ -104,6 +104,5 @@ angular.module('meanappApp')
           reveal: '=config'
         },
         link: link
-    }
-
+    };
 });
