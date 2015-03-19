@@ -27,7 +27,7 @@ angular.module('meanappApp')
       })
       .state('profile.new', {
         url: '/new',
-        templateUrl: 'partials/edit-form.html',
+        templateUrl: 'components/forms/edit-form.html',
         controller: 'BaseCtrl',
 //        onExit: function($stateParams, $state){
 //            //AD: gets called after $stateChangeStart
@@ -35,12 +35,12 @@ angular.module('meanappApp')
       })
       .state('profile.edit', {
         url: '/:pid/edit',
-        templateUrl: 'partials/edit-form.html',
+        templateUrl: 'components/forms/edit-form.html',
         controller: 'BaseCtrl'
       })
       .state('profile.view', {
         url: '/:pid/edit',
-        templateUrl: 'partials/view-form.html',
+        templateUrl: 'components/forms/view-form.html',
         controller: 'BaseCtrl'
       });
   });

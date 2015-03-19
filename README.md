@@ -163,12 +163,23 @@ __________________________________________________________________________
  - Created Welcome Page using Reveal.js (https://github.com/hakimel/reveal.js) as Angular directive inspired by http://jsfiddle.net/BinaryMuse/CXqAb/
  - Modal signup and login inspired by http://brewhouse.io/blog/2014/12/09/authentication-made-simple-in-single-page-angularjs-applications.html
  - Created a site Schema that is used populate site content
- __________________________________________________________________________
+__________________________________________________________________________
 
-**[Ninth Commit]():** 
+**[Ninth Commit](https://github.com/anshumandas/meanapp/commit/e3a11bbc29bc4783cd8aba07c948f9dfe4ac36bb):** 
 
  - Deployed demo on Openshift http://meanapp-anshumandas.rhcloud.com/
  - Fixed few bugs and made changes to the Grunt.js file to make the demo work
  - Since direct mail does not work in OpenShift used gmail with OAuth2
  - Grunt task for Openshift deploy
  - grunt cssmin has issue with @import.  So copied the css from the import url in login.css
+ 
+ __________________________________________________________________________
+
+**[Tenth Commit]():** 
+
+ - Navigation schema enhanced. Allows api based menus that can get updated by socket.io
+ - Menu as directives
+ - integrated formsangular as part of project instead of dependency. May be replacing it altogether
+ - Introduced the Maker and artifact schema inheritence hierarchy. CRUD operations handlers...
+ - Introduced groups concept
+ - Reorganized folders

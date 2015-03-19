@@ -12,8 +12,7 @@ angular.module('meanappApp', [
   'ngGrid',
   'ngCkeditor',
   'ui.select2',
-  'uploadModule'//,
-  //'Scope.onReady'
+  'uploadModule'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

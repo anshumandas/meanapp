@@ -36,7 +36,7 @@ angular.module('meanappApp')
 ////AD: this hack allows us to stop BaseCtrl from redirecting to another state
 //  .run(function($rootScope, $state, User, Auth) {
 //    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) { 
-//        if(fromState.templateUrl === "partials/edit-form.html"){
+//        if(fromState.templateUrl === "components/forms/edit-form.html"){
 //          if(toState.url==='/:model/:form/:id/edit' && toParams.form === 'profile') { 
 ////            console.log(fromState);
 ////            console.log(fromParams);

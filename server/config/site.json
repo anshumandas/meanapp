@@ -1,0 +1,95 @@
+{
+    "name": "MEANapp",
+    "title": "Defualt MEAN app", 
+    "header": {
+        "mainMenu":[
+                {
+                    "title": "Hello",
+                    "onClick": "hi()"
+                },
+                {
+                    "title": "Sites",
+                    "api": "sites/list"
+                },
+                {
+                    "title": "Admin",
+                    "permission": "admin",
+                    "submenu": [                
+                        {
+                            "title": "Users",
+                            "link": "/admin"
+                        },               
+                        {
+                            "title": "Profiles",
+                            "link": "/data/profile"
+                        }
+                    ]
+                }
+               ],
+        "userMenu":[
+        {
+            "title": "Hello {{ user().nickname }}",
+            "icon": {"clazz":"caret"},
+            "permission": "user",
+            "submenu": [                
+                {
+                    "title": "Create Profile",
+                    "link": "/profile",
+                    "hideIf": "user().details",
+                    "state": "profile.new"
+                },                         
+                {
+                    "title": "View Profile",
+                    "link": "/profile",
+                    "showIf": "user().details",
+                    "state": "profile.view({pid:user().details})"
+                },                         
+                {
+                    "title": "Edit Profile",
+                    "link": "/profile",
+                    "showIf": "user().details",
+                    "state": "profile.edit({pid:user().details})"
+                },               
+                {
+                    "title": "Change Password",
+                    "link": "/chpwd"
+                },               
+                {
+                    "title": "Logout",
+                    "onClick": "logout()"
+                }
+            ]
+        }
+       ]
+    }, 
+    "footer":{
+        "copyright":"test"
+    },
+    "welcome": { 
+        "reveal": {
+            "config": {
+                "transition":"concave", 
+                "theme": "simple" 
+            }, 
+            "slides": [
+                { "steps": [
+                    {"heading":"Welcome<br/>to<br/>MEANapp", "description":"A boiler-plate for new generation web applications"}]},
+                { "steps": [
+                    {"heading":"MEAN Stack", 
+                        "list":{"ordered":false, "items":["Mongo DB", "Express.js", "Angular.js", "Node.js"] }
+                    },                                       
+                    {"heading":"Mongo DB", "description":"Mongo DB is a No-SQL database. Mongoose.js is used for Schema wrapper."},                     
+                    {"heading":"Express.js", "description":"Javascript based webserver"},
+                    {"heading":"Angular.js", "description":"Superheroic Javascript MVC framework by Google"},
+                    {"heading":"Node.js", "description":"Awesome event processing server built on Javascript over Chrome V8"}
+                         ] 
+                },
+                { "steps": [
+                    {"heading":"Model Driven Site", "description":"The following are populated using MongoDB schema:", 
+                        "list":{"ordered":true, "items":["Reveal Slides", "Navbar dropdowns", "Forms"] }}
+                    ] 
+                }
+            ]
+        }
+    }
+}

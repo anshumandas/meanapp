@@ -30,7 +30,8 @@
     "socket.io-client": "^1.0.6",
     "socketio-jwt": "^2.0.2",
     "email-templates": "=0.0.5",
-    "nodemailer": "=0.7.1"
+    "nodemailer": "=0.7.1",
+    "sliced": "0.0.5"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

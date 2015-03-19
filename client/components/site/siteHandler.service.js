@@ -20,6 +20,10 @@ angular.module('meanappApp')
         } else {
             cb(currentSite);
         }
+      },
+      list: function(callback){
+        var cb = callback || angular.noop;
+
       }
     };
   });

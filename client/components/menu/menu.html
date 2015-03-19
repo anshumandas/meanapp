@@ -1,0 +1,44 @@
+<li ng-repeat="item in items" ng-class="{active: isActive(item.link)}" ng-if="!item.api && item.submenu.length===0" ng-show="show(item)">
+    <a ng-href="{{item.link}}"><b ng-if="item.icon && item.icon.beforeTitle" ng-class="item.icon.clazz"></b> {{compile(item.title)}} <b ng-if="item.icon && !item.icon.beforeTitle" ng-class="item.icon.clazz"></b></a>
+</li>
+<li dropdown class="dropdown" ng-repeat="item in items" ng-class="{active: isActive(item.link)}" ng-if="item.submenu.length>0" ng-show="show(item)">
+    <a href="#" class="dropdown-toggle" dropdown-toggle><b ng-if="item.icon && item.icon.beforeTitle" ng-class="item.icon.clazz"></b> {{compile(item.title)}} <b ng-if="item.icon && !item.icon.beforeTitle" ng-class="item.icon.clazz"></b></a>
+    <ul class="dropdown-menu">
+    </ul>
+</li>
+<li dropdown class="dropdown" ng-repeat="item in items" ng-class="{active: isActive(item.link)}" ng-if="item.api && item.submenu.length===0" ng-show="show(item)">
+    <a ng-href="{{item.link}}"><b ng-if="item.icon && item.icon.beforeTitle" ng-class="item.icon.clazz"></b> {{compile(item.title)}} <b ng-if="item.icon && !item.icon.beforeTitle" ng-class="item.icon.clazz"></b></a>
+</li>
+
+
+<!--
+<li ng-show="isAdmin()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Admin </a>
+    <ul class="dropdown-menu">
+<li ng-class="{active: isActive('/admin')}"><a class="dropdown-option" href="/admin">Users</a></li>
+<li ng-class="{active: isActive('/data/profile')}"><a class="dropdown-option" href="data/profile">Profiles</a></li>
+    </ul>
+</li>                
+-->
+<!--
+<li ng-show="items.length > 0" class="dropdown">
+    <a class="dropdown-toggle">
+        {{contextMenu}}
+    </a>
+    <ul class="dropdown-menu">
+        <li ng-repeat="choice in items">
+            <a class="dropdown-option" ng-hide="isHidden($index)" ng-disabled="isDisabled($index)" ng-href="{{choice.url}}" ng-click="doClick($index)">{{choice.text}}</a>
+        </li>
+    </ul>
+</li>
+-->
+<!--<li>
+    
+    <li dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Hello {{ user.nickname }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-hide="user.details" ui-sref="profile.new">Create Profile</a></li>
+                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="user.details" ui-sref="profile.view({pid:getCurrentUser().details})">View Profile</a></li>
+                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="user.details" ui-sref="profile.edit({pid:getCurrentUser().details})">Edit Profile</a></li>
+                            <li ng-class="{active: isActive('/chpwd')}"><a class="dropdown-option" href="/chpwd">Change Password</a></li>
+                            <li ng-class="{active: isActive('/logout')}"><a class="dropdown-option" href="" ng-click="logout()">Logout</a></li>
+                        </ul>
+                    </li>-->

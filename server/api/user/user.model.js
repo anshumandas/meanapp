@@ -1,20 +1,20 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var MakerSchema = require('../../components/schemas/maker');
 var ProfileSchema = require('../forms/profile');
 var config = require('../../config/environment');
 var crypt = require('../../components/crypt');
 
 var userRankOptions = 'newbie, explorer, champion, guru'.split(', ');
 
-var UserSchema = new Schema({
+var UserSchema = new MakerSchema({
 //AD: changed name to nickname
 //  name: String,
   nickname: {type: String, required: true, index: { unique: true } }, //let user choose unique virtual identity post login. 
   email: { type: String, lowercase: true, required: true, index: { unique: true } },
 //AD: added enum
-  role: {type: String, default : 'user', enum: config.userRoles},
+  role: {type: String, default : config.userRoles[1], enum: config.userRoles},
   hashedPassword: String,
   provider: String,
   salt: String,
@@ -23,10 +23,7 @@ var UserSchema = new Schema({
   google: {},
   github: {},
 //AD : added the following properties. These are not editable through forms.
-  created: {type: Date, default: Date.now},
-  lastActivity: {type: Date, default: Date.now}, //all actions must change this
-  activityCount: Number, //can be used to upgrade rank later on. Some activities can have higher weights
-  rank: {type: String, default : 'newbie', enum: userRankOptions},  
+  rank: {type: String, default : userRankOptions[0], enum: userRankOptions},  
   state: {type: String, default : 'active', enum: ['active', 'locked', 'deleted', 'blocked']},
   details: {type: mongoose.Schema.Types.ObjectId, ref: 'profile'}
 });
@@ -149,4 +146,4 @@ UserSchema.methods = {
      
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model(MakerSchema.model, UserSchema);

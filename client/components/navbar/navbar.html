@@ -8,60 +8,26 @@
                 <span class="icon-bar"></span>
             </button>
             <div class="pull-left">
-                <a class="navbar-brandpluslogo brandpluslogo" href="/">
+                <a class="navbar-brandpluslogo brandpluslogo" href="/" ng-show="showLogo">
                     <a href="/welcome" class="navbar-brand">{{site.name}}</a>
                 </a>
             </div>
-<!--            <div class="visible-lg visible-desktop pull-right col-md-1 span1"></div>-->
-<!--            <global-search class="global-search"></global-search>-->
-            <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
-                <ul class="nav navbar-nav">
-                    <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-                        <a ng-href="{{item.link}}">{{item.title}}</a>
+<!--
+            <div ng-show="showSearch" class="visible-lg visible-desktop pull-right col-md-1 span1">
+                <global-search class="global-search"></global-search>
+            </div>
+-->
+            <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">    
+                <ul menu items="mainMenu" is-logged-in="isLoggedIn()" is-active="isActive(route)" has-permission="hasPermission(permission)" ext-fn="run(fn)" class="nav navbar-nav"/>
+                <ul class="nav navbar-nav navbar-right">                    
+                    <li ng-hide="isLoggedIn()" ng-show="showJoin" ng-class="{active: isActive('/signup')}">
+                        <a href ng-click="signup()">Sign up</a>
                     </li>
-<!--
-                    <li class="dropdown"><a href="#" class="dropdown-toggle">Applicants</a>
-                        <ul class="dropdown-menu">
--->
-<!--
-                            <li><a class="dropdown-option" href="data/Applicant">Listing</a></li>
--->
-<!--                        </ul>-->
-<!--                    </li>-->
-                    <li ng-show="isAdmin()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Admin <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                    <li ng-class="{active: isActive('/admin')}"><a class="dropdown-option" href="/admin">Users</a></li>
-                    <li ng-class="{active: isActive('/data/profile')}"><a class="dropdown-option" href="data/profile">Profiles</a></li>
-                        </ul>
-                    </li>                
-<!--
-                    <li ng-show="items.length > 0" class="dropdown">
-                        <a class="dropdown-toggle">
-                            {{contextMenu}}
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li ng-repeat="choice in items">
-                                <a class="dropdown-option" ng-hide="isHidden($index)" ng-disabled="isDisabled($index)" ng-href="{{choice.url}}" ng-click="doClick($index)">{{choice.text}}</a>
-                            </li>
-                        </ul>
-                    </li>
--->
-                  <li>
+                    <li ng-hide="isLoggedIn()" ng-show="showLogin" ng-class="{active: isActive('/login')}">
+                        <a href ng-click="login()">Login</a>
+                    </li>                                           
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    
-                    <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href ng-click="login(true)">Sign up</a></li>
-                    <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href ng-click="login(false)">Login</a></li>
-                    <li ng-show="isLoggedIn()" dropdown class="dropdown" ><a href="#" class="dropdown-toggle" dropdown-toggle>Hello {{ getCurrentUser().nickname }} <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-hide="getCurrentUser().details" ui-sref="profile.new">Create Profile</a></li>
-                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="getCurrentUser().details" ui-sref="profile.view({pid:getCurrentUser().details})">View Profile</a></li>
-                            <li ng-class="{active: isActive('/profile')}"><a class="dropdown-option" href="/profile" ng-show="getCurrentUser().details" ui-sref="profile.edit({pid:getCurrentUser().details})">Edit Profile</a></li>
-                            <li ng-class="{active: isActive('/chpwd')}"><a class="dropdown-option" href="/chpwd">Change Password</a></li>
-                            <li ng-class="{active: isActive('/logout')}"><a class="dropdown-option" href="" ng-click="logout()">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                <ul menu items="userMenu" user="getCurrentUser()" is-logged-in="isLoggedIn()" is-active="isActive(route)" has-permission="hasPermission(permission)" ext-fn="run(fn)" class="nav navbar-nav navbar-right"/>
             </div>
         </div>
     </div>

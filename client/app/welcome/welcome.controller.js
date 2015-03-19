@@ -3,14 +3,20 @@
 angular.module('meanappApp')
   .controller('WelcomeCtrl', function ($scope, $timeout, SiteHandler) {
     SiteHandler.getCurrentSite(function(site) {
-        //TODO: check if error
-        $scope.site = site;
-        $scope.slides = [];
-        if(site && site.welcome){
-            $scope.site.welcome.slides.forEach(function (element) { 
-                $scope.slides.push({ 'steps': element.steps  });
-            });            
-            $scope.reveal = $scope.site.welcome.reveal;
+        if(site instanceof Error){
+            console.log(site);
+        } else {
+            $scope.slides = [];
+            if(site && site.welcome) {
+                if(site.welcome.reveal && site.welcome.reveal.slides){
+                    $scope.reveal = site.welcome.reveal;
+                    $scope.config = site.welcome.reveal.config;
+                    site.welcome.reveal.slides.forEach(function (element) { 
+                        $scope.slides.push({ 'steps': element.steps  });
+                    }); 
+                }
+                //AD: other plugins will come here
+            }
         }
     });
 });

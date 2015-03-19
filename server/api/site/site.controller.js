@@ -17,7 +17,7 @@ exports.default = function(req, res) {
     //do not find by ID but site name
   Site.findOne({name:'MEANapp'}, function (err, site) {
     if(err) { return handleError(res, err); }
-    if(!site) { return res.send(404); }
+    if(!site) { return res.status(404).end(); }
 //    console.log(site);
     return res.json(site);
   });
@@ -28,7 +28,7 @@ exports.show = function(req, res) {
     //do not find by ID but site name
   Site.findOne({name:req.params.name}, function (err, site) {
     if(err) { return handleError(res, err); }
-    if(!site) { return res.send(404); }
+    if(!site) { return res.status(404).end(); }
     return res.json(site);
   });
 };
@@ -48,7 +48,7 @@ exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
   Site.findById(req.params.id, function (err, site) {
     if (err) { return handleError(res, err); }
-    if(!site) { return res.send(404); }
+    if(!site) { return res.status(404).end(); }
     var updated = _.merge(site, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -62,7 +62,7 @@ exports.destroy = function(req, res) {
     console.log('destroy');
   Site.findById(req.params.id, function (err, site) {
     if(err) { return handleError(res, err); }
-    if(!site) { return res.send(404); }
+    if(!site) { return res.status(404).end(); }
     site.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);

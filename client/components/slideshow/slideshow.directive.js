@@ -44,13 +44,13 @@ angular.module('meanappApp')
               section = angular.element('<section>');
               for (var j = 0; j < steps.length; j++) {
                 var subSection = makeSlide(steps[j]); 
-//                if (j < steps.length - 1) {
-//                  subSection.attr('data-autoslide', '1000');
-//                }
                 section.append(subSection);
               }
             }
 
+            if (config.autoslide === true) {
+              section.attr('data-autoslide', '2000');
+            }
             elem.append(section);
         }
         
@@ -58,10 +58,11 @@ angular.module('meanappApp')
     };
             
     var updateSettings = function(config) { 
+//        console.log(config);
         var settings = { 
             theme: 'default',
             transition: 'default',
-//            loop: false, 
+            loop: true, 
 //            controls: true,
             progress: false,
             history: false,
@@ -88,20 +89,23 @@ angular.module('meanappApp')
     };
       
     var link = function(scope, elem, attrs) {
-
+        
         scope.$watch(attrs.slides, function(value) {
-          scope.slides = value;
-          updateSlides(scope.slides, scope.reveal, elem);
+//            console.log(value);
+          if(value) {
+            scope.slides = value;
+            updateSlides(scope.slides, scope.config, elem);
+          }
         });
 
-//        updateSlides(scope.slides, scope.reveal, elem);
+//        updateSlides(scope.slides, scope.config, elem);
     };
       
     return {
         restrict: 'E',
         scope: {
           slides: '=slides',
-          reveal: '=config'
+          config: '=config'
         },
         link: link
     };
